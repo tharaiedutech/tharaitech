@@ -29,7 +29,7 @@ function initNav() {
 
 function markActiveLink() {
   var current = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
-  document.querySelectorAll(".nav-links a").forEach(function (link) {
+  document.querySelectorAll(".nav-links a:not(.nav-cta)").forEach(function (link) {
     var href = (link.getAttribute("href") || "").toLowerCase();
     if (href === current || (current === "" && href === "index.html")) {
       link.classList.add("active");
@@ -47,16 +47,14 @@ function initContactForm() {
   if (!form) return;
 
   var status = document.getElementById("form-status");
+  var submitBtn = form.querySelector("button[type=submit]");
   var businessEmail = form.getAttribute("data-business-email") || "contact@tharaitechnologies.com";
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     var name = form.elements["name"].value.trim();
-    var org = form.elements["organization"].value.trim();
     var email = form.elements["email"].value.trim();
-    var phone = form.elements["phone"].value.trim();
-    var enquiryType = form.elements["enquiryType"].value;
     var message = form.elements["message"].value.trim();
 
     if (!name || !email || !message) {
@@ -64,24 +62,31 @@ function initContactForm() {
       return;
     }
 
-    var subject = "Website Enquiry from " + name + (enquiryType ? " — " + enquiryType : "");
-    var bodyLines = [
-      "Name: " + name,
-      "Organization: " + (org || "-"),
-      "Email: " + email,
-      "Phone: " + (phone || "-"),
-      "Enquiry Type: " + (enquiryType || "-"),
-      "",
-      "Message:",
-      message
-    ];
-    var mailtoUrl =
-      "mailto:" + businessEmail +
-      "?subject=" + encodeURIComponent(subject) +
-      "&body=" + encodeURIComponent(bodyLines.join("\n"));
+    var data = new URLSearchParams(new FormData(form)).toString();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
 
-    window.location.href = mailtoUrl;
-    showStatus(status, "Opening your email client to send this enquiry to " + businessEmail + "…", "success");
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: data
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error("Submission failed");
+        form.reset();
+        showStatus(status, "Thank you — your message has been sent. We'll get back to you within 1–2 business days.", "success");
+      })
+      .catch(function () {
+        showStatus(
+          status,
+          "Something went wrong sending this form. Please email us directly at " + businessEmail + ".",
+          "error"
+        );
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit";
+      });
   });
 }
 

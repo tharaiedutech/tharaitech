@@ -35,7 +35,7 @@
 
   --radius: 12px;
   --radius-sm: 8px;
-  --max-width: 1180px;
+  --max-width: 1140px;
   --shadow-md: 0 8px 24px rgba(10, 17, 40, 0.08);
   --shadow-lg: 0 20px 48px rgba(10, 17, 40, 0.14);
 }
@@ -64,7 +64,11 @@ button { font-family: inherit; }
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 48px;
+}
+
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
 }
 
 section { padding: 88px 0; }
@@ -148,8 +152,8 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
   display: inline-flex;
   align-items: center;
   width: max-content;
-  transform: translateY(-50%) translateX(100%);
-  animation: announcement-scroll 16s linear infinite;
+  transform: translateY(-50%) translateX(100vw);
+  animation: announcement-scroll 22s linear infinite;
 }
 
 .announcement-bar:hover .announcement-track {
@@ -157,7 +161,7 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
 }
 
 @keyframes announcement-scroll {
-  from { transform: translateY(-50%) translateX(100%); }
+  from { transform: translateY(-50%) translateX(100vw); }
   to { transform: translateY(-50%) translateX(-100%); }
 }
 
@@ -278,6 +282,11 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
 
 .nav-links a.active {
   color: var(--teal-300);
+}
+
+.nav-links a.nav-cta,
+.nav-links a.nav-cta:hover {
+  color: var(--navy-950);
 }
 
 .nav-cta {
@@ -403,13 +412,11 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
     radial-gradient(1100px 500px at 18% -10%, rgba(63, 215, 192, 0.14), transparent 60%),
     linear-gradient(180deg, var(--navy-950), var(--navy-900) 60%, var(--navy-800));
   color: var(--text-on-dark);
-  padding: 120px 0 96px;
+  padding: 76px 0 64px;
   border-bottom: 1px solid var(--border-dark);
 }
 
-.hero-inner { max-width: 760px; }
-
-.hero h1 { margin-bottom: 18px; }
+.hero h1 { line-height: 1; margin-bottom: 16px; }
 
 .hero .lede { font-size: 1.18rem; margin-bottom: 8px; color: var(--text-on-dark); font-weight: 500; }
 
@@ -959,6 +966,20 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
 
 .footer-col ul li a { font-size: 0.94rem; transition: color 0.15s ease; }
 .footer-col ul li a:hover { color: var(--teal-300); }
+
+.footer-col ul li.current-company {
+  color: var(--edu-green);
+  font-weight: 700;
+}
+
+.footer-col .group-companies li {
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+
+.footer-col .group-companies li a {
+  font-size: 0.8rem;
+}
 
 .footer-bottom {
   padding-top: 24px;
