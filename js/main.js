@@ -48,13 +48,17 @@ function initContactForm() {
 
   var status = document.getElementById("form-status");
   var submitBtn = form.querySelector("button[type=submit]");
-  var businessEmail = form.getAttribute("data-business-email") || "contact@tharaitechnologies.com";
+  var businessEmail = form.getAttribute("data-business-email") || "contact@tharaitech.com";
+  var fallbackEmail = form.getAttribute("data-fallback-email") || "tharaitech@gmail.com";
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     var name = form.elements["name"].value.trim();
+    var org = form.elements["organization"] ? form.elements["organization"].value.trim() : "";
     var email = form.elements["email"].value.trim();
+    var phone = form.elements["phone"] ? form.elements["phone"].value.trim() : "";
+    var enquiryType = form.elements["enquiryType"] ? form.elements["enquiryType"].value : "";
     var message = form.elements["message"].value.trim();
 
     if (!name || !email || !message) {
@@ -77,17 +81,45 @@ function initContactForm() {
         showStatus(status, "Thank you — your message has been sent. We'll get back to you within 1–2 business days.", "success");
       })
       .catch(function () {
-        showStatus(
-          status,
-          "Something went wrong sending this form. Please email us directly at " + businessEmail + ".",
-          "error"
-        );
+        sendFallbackEmail({
+          to: businessEmail,
+          cc: fallbackEmail,
+          name: name,
+          org: org,
+          email: email,
+          phone: phone,
+          enquiryType: enquiryType,
+          message: message
+        });
+        form.reset();
+        showStatus(status, "Thanks — we're opening your email app so you can send this straight to us.", "success");
       })
       .finally(function () {
         submitBtn.disabled = false;
         submitBtn.textContent = "Submit";
       });
   });
+}
+
+function sendFallbackEmail(fields) {
+  var subject = "Website Enquiry from " + fields.name + (fields.enquiryType ? " — " + fields.enquiryType : "");
+  var bodyLines = [
+    "Name: " + fields.name,
+    "Organization: " + (fields.org || "-"),
+    "Email: " + fields.email,
+    "Phone: " + (fields.phone || "-"),
+    "Enquiry Type: " + (fields.enquiryType || "-"),
+    "",
+    "Message:",
+    fields.message
+  ];
+  var mailtoUrl =
+    "mailto:" + fields.to +
+    "?cc=" + encodeURIComponent(fields.cc) +
+    "&subject=" + encodeURIComponent(subject) +
+    "&body=" + encodeURIComponent(bodyLines.join("\n"));
+
+  window.location.href = mailtoUrl;
 }
 
 function showStatus(el, message, type) {

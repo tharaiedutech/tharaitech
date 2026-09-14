@@ -427,7 +427,7 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
 .page-hero {
   background: linear-gradient(180deg, var(--navy-950), var(--navy-800));
   color: var(--text-on-dark);
-  padding: 76px 0 64px;
+  padding: 56px 0 40px;
   border-bottom: 1px solid var(--border-dark);
 }
 
