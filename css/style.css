@@ -688,7 +688,8 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
 
 .capability-group h3 { margin-bottom: 16px; }
 
-.capability-group ul li {
+.capability-group ul li,
+.bullet-grid li {
   position: relative;
   padding-left: 20px;
   margin-bottom: 10px;
@@ -696,7 +697,8 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
   color: var(--text-muted);
 }
 
-.capability-group ul li::before {
+.capability-group ul li::before,
+.bullet-grid li::before {
   content: "";
   position: absolute;
   left: 0;
@@ -705,6 +707,19 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
   height: 7px;
   border-radius: 2px;
   background: var(--teal-500);
+}
+
+.bullet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 32px;
+  max-width: 760px;
+  margin: 24px auto 0;
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .bullet-grid { grid-template-columns: 1fr; }
 }
 
 /* ---------- Contact category cards ---------- */
@@ -728,6 +743,10 @@ h3 { font-size: 1.2rem; line-height: 1.35; }
   background: linear-gradient(135deg, var(--navy-950), var(--navy-700));
   color: var(--text-on-dark);
   border: 1px solid var(--border-dark);
+}
+
+.banner .lede {
+  color: var(--text-on-dark-muted);
 }
 
 .banner p.small {
